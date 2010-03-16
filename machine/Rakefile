@@ -4,7 +4,12 @@ CLEAN.include('problem', 'solutions', 'rules.lp')
 
 LPARSE_FILES = FileList['ec.lp', 'engine.lp', 'rules.lp', 'context.lp']
 PROLOG = 'swipl'
-GAME_FILE = ENV['file']
+
+if ENV['file'].nil?
+    GAME_FILE = 'script.pl'
+else
+    GAME_FILE = ENV['file']
+end
 
 task :default => 'solution'
 
