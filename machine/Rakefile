@@ -4,10 +4,11 @@ CLEAN.include('problem', 'solutions', 'rules.lp')
 
 LPARSE_FILES = FileList['ec.lp', 'engine.lp', 'rules.lp', 'context.lp']
 PROLOG = 'swipl'
+GAME_FILE = ENV['file']
 
 task :default => 'solution'
 
-task 'rules.lp' => 'script.pl' do
+task 'rules.lp' => GAME_FILE do
     sh "#{PROLOG} -g '[compiler,script], main.' > rules.lp"
 end
 
@@ -16,7 +17,7 @@ task 'problem' => LPARSE_FILES do
         "| pv -N grounding > problem"
 end
 
-task 'solution' => ['problem', 'smodels.flags'] do
+task 'solution' => ['problem'] do
     sh %{pv -N solving problem | clasp -n 10 > solution} do | ok, status |
         if status.exitstatus == 10 then
             puts "Satisfied"
